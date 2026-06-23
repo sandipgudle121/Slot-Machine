@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a11215ce086295642b2e279ba2835839, type: 3}
   m_Name: Cherry
   m_EditorClassIdentifier: 
-  symbolName: 
-  sprite: {fileID: 0}
-  payoutMultiplier: 0
+  symbolName: Cherry
+  sprite: {fileID: -5620835742497143143, guid: 0ad425003bb095841a537dd40d37f15e, type: 3}
+  payoutMultiplier: 2

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -6,6 +7,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UIManager uiManager;
     [SerializeField] private SlotMachineController slotMachineController;
 
+    [SerializeField] private ReelController reel1;
+    [SerializeField] private ReelController reel2;
+    [SerializeField] private ReelController reel3;
+
+    private bool isSpinning = false;
     private int currentBet = 0;
 
     public int CurrentBet => currentBet;
@@ -26,39 +32,73 @@ public class GameManager : MonoBehaviour
     }
 
     public void SetBet10() => SetBet(10);
-
     public void SetBet50() => SetBet(50);
-
     public void SetBet100() => SetBet(100);
 
     public void Spin()
     {
-        // No bet selected
+        if (isSpinning)
+            return;
+
+        StartCoroutine(SpinRoutine());
+    }
+
+    private IEnumerator SpinRoutine()
+    {
+        isSpinning = true;
+
+        // Validation
         if (currentBet <= 0)
         {
             uiManager.UpdateResult("SELECT BET");
-            return;
+            isSpinning = false;
+            yield break;
         }
 
-        // Not enough balance
         if (!currencyManager.Spend(currentBet))
         {
             uiManager.UpdateResult("NOT ENOUGH BALANCE");
-            return;
+            isSpinning = false;
+            yield break;
         }
 
-        // Update balance after spending
         uiManager.UpdateBalance(currencyManager.CurrentBalance);
 
-        // Generate random symbols
-        SymbolData symbol1 = slotMachineController.Spin();
-        SymbolData symbol2 = slotMachineController.Spin();
-        SymbolData symbol3 = slotMachineController.Spin();
+        // Start spinning
+        reel1.StartSpin();
+        reel2.StartSpin();
+        reel3.StartSpin();
 
-        // Show them
-        slotMachineController.SetCenterSymbols(symbol1, symbol2, symbol3);
+        // Let all reels spin together
+        yield return new WaitForSeconds(0.8f);
 
-        // Check win
+        // Stop Reel 1
+        reel1.StopSpin();
+        reel1.AlignReel();
+
+        yield return new WaitForSeconds(0.3f);
+
+        // Stop Reel 2
+        reel2.StopSpin();
+        reel2.AlignReel();
+
+        yield return new WaitForSeconds(0.3f);
+
+        // Stop Reel 3  
+        reel3.StopSpin();
+        reel3.AlignReel();
+
+        SymbolData symbol1 = reel1.GetCenterSymbol();
+        SymbolData symbol2 = reel2.GetCenterSymbol();
+        SymbolData symbol3 = reel3.GetCenterSymbol();
+
+        Debug.Log(
+                    $"Center Symbols: " +
+                    $"{symbol1.symbolName}, " +
+                    $"{symbol2.symbolName}, " +
+                    $"{symbol3.symbolName}");
+
+        // Win check
         if (symbol1 == symbol2 && symbol2 == symbol3)
         {
             int reward = currentBet * symbol1.payoutMultiplier;
@@ -67,13 +107,13 @@ public class GameManager : MonoBehaviour
 
             uiManager.UpdateBalance(currencyManager.CurrentBalance);
 
-            uiManager.UpdateResult(
-                $"YOU WIN! +{reward}"
-            );
+            uiManager.UpdateResult($"YOU WIN! +{reward}");
         }
         else
         {
             uiManager.UpdateResult("TRY AGAIN");
         }
+
+        isSpinning = false;
     }
 }

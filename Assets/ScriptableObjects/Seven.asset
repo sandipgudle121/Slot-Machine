@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a11215ce086295642b2e279ba2835839, type: 3}
   m_Name: Seven
   m_EditorClassIdentifier: 
-  symbolName: 
-  sprite: {fileID: 0}
-  payoutMultiplier: 0
+  symbolName: Seven
+  sprite: {fileID: 2193077994593488821, guid: 2adb471ef81cabd4f805477fa959ede9, type: 3}
+  payoutMultiplier: 10
