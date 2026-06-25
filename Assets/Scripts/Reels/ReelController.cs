@@ -84,6 +84,11 @@ public class ReelController : MonoBehaviour
         return symbolControllers[2].CurrentSymbol;
     }
 
+    public SymbolController GetCenterSymbolController()
+    {
+        return symbolControllers[2];
+    }
+
     public void SetCenterSymbol(SymbolData symbol)
     {
         symbolControllers[2].SetSymbol(symbol);

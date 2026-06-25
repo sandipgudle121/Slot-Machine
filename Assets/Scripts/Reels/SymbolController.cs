@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class SymbolController : MonoBehaviour
 {
@@ -13,5 +14,16 @@ public class SymbolController : MonoBehaviour
     {
         currentSymbol = symbol;
         symbolImage.sprite = symbol.sprite;
+    }
+
+    public IEnumerator Pulse()
+    {
+        Vector3 originalScale = transform.localScale;
+
+        transform.localScale = originalScale * 1.2f;
+
+        yield return new WaitForSeconds(0.2f);
+
+        transform.localScale = originalScale;
     }
 }
