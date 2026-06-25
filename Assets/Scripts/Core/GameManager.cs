@@ -5,7 +5,6 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private CurrencyManager currencyManager;
     [SerializeField] private UIManager uiManager;
-    [SerializeField] private SlotMachineController slotMachineController;
 
     [SerializeField] private ReelController reel1;
     [SerializeField] private ReelController reel2;
@@ -121,6 +120,13 @@ public class GameManager : MonoBehaviour
         if (symbol1 == symbol2 && symbol2 == symbol3)
         {
             int reward = currentBet * symbol1.payoutMultiplier;
+
+            if (symbol1 == null || symbol2 == null || symbol3 == null)
+            {
+                uiManager.ShowErrorMessage("SYMBOL ERROR");
+                isSpinning = false;
+                yield break;
+            }
 
             currencyManager.Add(reward);
 

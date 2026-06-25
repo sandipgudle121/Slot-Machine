@@ -67,17 +67,13 @@ public class ReelController : MonoBehaviour
 
     public SymbolData GetCenterSymbol()
     {
-        Debug.Log($"{gameObject.name} → symbolControllers.Length = {symbolControllers.Length}");
-
         if (symbolControllers == null)
         {
-            Debug.LogError($"{gameObject.name}: symbolControllers is NULL");
             return null;
         }
 
         if (symbolControllers.Length <= 2)
         {
-            Debug.LogError($"{gameObject.name}: symbolControllers has only {symbolControllers.Length} elements");
             return null;
         }
 
